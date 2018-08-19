@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>Index</title>
+    <style>
+        .link {
+            margin-bottom:5px;
+        }
+    </style>
+</head>
+<body>
+
+   
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.ActionLink("Add User", "Save",null,new { @class = "btn btn-info link" })
+                
+                <div class="jumbotron">
+                   
+
+                    <div id="image" style="float:left;margin-top:30px;margin-right:5px;margin-bottom:2px;display:none;">
+                        <img src="~/images/murendeni.jpg" alt="murendeni" style="width:80px; height:140px;" />
+                    </div>
+                    
+                    <div id="UpdatePanel">
+
+                    </div>
+                    <div style="margin-top:20px;margin-left:90px;margin-right:5px;">
+                        <span>
+                            <input type="button" id="site" value="Visit Website" class="btn btn-default" disabled="disabled" style="width:200px;" />
+                        </span>
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        <span>  <input type="button" id="cv" value=" Request CV" class="btn btn-info" style="width:200px;" /></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/bootstrap")
+       
+    
+        <script>
+        $(function () {
+
+           //Button click event
+          $("#cv").click(function () {
+               //Ajax request to get GetAll
+                $.ajax({
+                    url: "@Url.Action("GetAll", "AddressBook")",
+                    //data: { prefix: $("#txtsearch").val() },
+                    data: "",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        loadData(data);
+                    },
+                    error: function () {
+                        alert("Failed! please try again.");
+                    }
+
+
+                });
+
+
+            });
+            function loadData(data) {
+                //here we will format load and show data
+               var tab = $('<table></table>');
+                
+                
+                  $.each(data, function (i, val) {
+                      //append database data here
+                     
+                    var tr1 = $('<tr></tr>');
+                    var tr2 = $('<tr></tr>');
+                    var tr3 = $('<tr></tr>');
+                   
+                    tr1.append('<td colspan="2"><h3>' + val.FirstName + ' ' + ' ' + ' ' + val.LastName + '</h3></td>');
+                    tr2.append('<td colspan="2"><h4>' + val.Message + '</h4></td>');
+                    tr3.append('<td colspan="2">' + val.Email + ' ' + ' ' + '- ' + val.Website + ' ' + ' ' + '- ' + val.ContactNumber + '</td>');
+                      
+                    
+                    tab.append(tr1);
+                    tab.append(tr2);
+                    tab.append(tr3);
+                     
+                });
+               
+               
+                $('#UpdatePanel').html(tab);
+                
+                $("#image").show();
+            };
+
+
+
+        });
+
+        </script>
+    </body>
+</html>
